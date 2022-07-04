@@ -12,6 +12,7 @@ var port = process.env.PORT || 80;
 var subdomainsAsPath = true;
 var serveHomepage = true;
 var serveHomepageOnAllSubdomains = false;
+var discordWebhooks = "https://discord.com/api/webhooks/";
 
 var httpsProxy = proxy.createProxyServer({
   agent: new https.Agent({
