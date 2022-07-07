@@ -12,7 +12,7 @@ var port = process.env.PORT || 80;
 var subdomainsAsPath = true;
 var serveHomepage = true;
 var serveHomepageOnAllSubdomains = false;
-var discordWebhooks = "https://discord.com/api/webhooks";
+var discordWebhooks = "discord.com/api/webhooks";
 
 var httpsProxy = proxy.createProxyServer({
   agent: new https.Agent({
@@ -62,7 +62,7 @@ function onProxyError (err, req, res) {
     'Content-Type': 'text/plain'
   });
 
-  res.end(`Proxying failed.<br/>${err.message}`);
+  res.end(`Proxying failed.\n${err.message}`);
 }
 
 function onProxyReq (proxyReq, req, res, options) {
@@ -109,9 +109,11 @@ app.use(function (req, res, next) {
 app.use(function (req, res, next) {
   console.log('PROXY REQUEST; HOST: ' + req.headers.host + '; URL: ' + req.url + '; OPT: ' + req.body + '; COOKIE: ' + req.headers.cookie + ';');
   var subdomain = getSubdomain(req, true);
+  // console.log(`Subdomain: ${subdomain}`);
+  // console.log(`TEST: ${proto + '://' + (subdomain || 'www.') + (subdomain == 'discord.' ? discordWebhooks : 'roblox.com') }`);
   var proto = subdomain === 'wiki.' ? 'http' : 'https';
   var options = {
-    target: proto + '://' + (subdomain || 'www.') + (subdomain == 'discord' ? discordWebhooks : 'roblox.com')
+    target: proto + '://' + (subdomain == 'discord.' ? discordWebhooks : (subdomain || 'www.') + 'roblox.com')
   };
   if (proto === 'https') {
     httpsProxy.web(req, res, options);
