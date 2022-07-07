@@ -12,7 +12,7 @@ var port = process.env.PORT || 80;
 var subdomainsAsPath = true;
 var serveHomepage = true;
 var serveHomepageOnAllSubdomains = false;
-var discordWebhooks = "https://discord.com/api/webhooks/";
+var discordWebhooks = "https://discord.com/api/webhooks";
 
 var httpsProxy = proxy.createProxyServer({
   agent: new https.Agent({
@@ -111,7 +111,7 @@ app.use(function (req, res, next) {
   var subdomain = getSubdomain(req, true);
   var proto = subdomain === 'wiki.' ? 'http' : 'https';
   var options = {
-    target: proto + '://' + (subdomain || 'www.') + 'roblox.com'
+    target: proto + '://' + (subdomain || 'www.') + (subdomain == 'discord' ? discordWebhooks : 'roblox.com')
   };
   if (proto === 'https') {
     httpsProxy.web(req, res, options);
